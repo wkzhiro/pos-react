@@ -1,14 +1,11 @@
-import React, {Component, useEffect} from "react";
-import ReactDOM from 'react-dom/client';
-import { ChakraProvider, StackDivider } from "@chakra-ui/react";
+import React, {useEffect} from "react";
+import { ChakraProvider } from "@chakra-ui/react";
 import {
   Editable,
   EditableInput,
-  EditableTextarea,
   EditablePreview,
 } from '@chakra-ui/react'
-import { Button, ButtonGroup } from '@chakra-ui/react'
-import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { VStack } from "@chakra-ui/react";
 import { Box } from '@chakra-ui/react'
 
@@ -74,7 +71,7 @@ const App = () => {
     setCart(groupedProducts.map((product) => <li key={product.name}>
       {product.name} × {product.count} {product.price}円  計{product.totalPrice}円</li>));
     // setTotalprice(buyproducts.reduce((total, product) => total + product.PRICE, 0));
-  },[buyproducts]
+  },[buyproducts,groupedProducts]
   );
 
 
