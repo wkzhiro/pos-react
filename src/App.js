@@ -16,9 +16,8 @@ const App = () => {
   const url = "http://127.0.0.1:8000/";
   const [buyproducts, setProducts] = useState([]);
   const [product, setProduct] = useState({productcode:"",NAME:"", PRICE: ""});
-  const [totalprice, setTotalprice]=useState(0);
+  // const [totalprice, setTotalprice]=useState(0);
   const [cart, setCart]=useState(["",""]);
-  const groupedProducts = []
   //const productObj = { productcode:"1",name:"おーいお茶", price: 150};
   // const productObj2 = { productcode:"2",name:"綾鷹", price: 160};
   // const [product2, setProduct2] = useState(productObj2);
@@ -52,6 +51,9 @@ const App = () => {
   
   
   useEffect(() => {
+
+  const groupedProducts = []
+
   buyproducts.forEach(product => {
     const existingProduct = groupedProducts.find(groupedProduct => groupedProduct.name === product.NAME);
   
@@ -71,7 +73,7 @@ const App = () => {
     setCart(groupedProducts.map((product) => <li key={product.name}>
       {product.name} × {product.count} {product.price}円  計{product.totalPrice}円</li>));
     // setTotalprice(buyproducts.reduce((total, product) => total + product.PRICE, 0));
-  },[buyproducts,groupedProducts]
+  },[buyproducts]
   );
 
 
@@ -92,7 +94,7 @@ const App = () => {
       
       const response = await axios.post(url + "buy_product/", buy_data);
       console.log("response",response.data)
-      setTotalprice([response[1],response[2]])
+      // setTotalprice([response[1],response[2]])
 
       alert(`合計金額は${response.data[1]}円(税抜)、${response.data[2]}円（税込）です。`)
       setProducts([])
