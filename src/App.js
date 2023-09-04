@@ -1,4 +1,4 @@
-import Reac, {Component, useEffect} from "react";
+import React, {Component, useEffect} from "react";
 import ReactDOM from 'react-dom/client';
 import { ChakraProvider, StackDivider } from "@chakra-ui/react";
 import {
