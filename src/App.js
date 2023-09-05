@@ -13,7 +13,7 @@ import { useState } from "react";
 import axios from "axios";
 
 const App = () => {  
-  const url = "http://127.0.0.1:8000/";
+  const url = "https://webapp-class-4-1.azurewebsites.net/";
   const [buyproducts, setProducts] = useState([]);
   const [product, setProduct] = useState({productcode:"",NAME:"", PRICE: ""});
   // const [totalprice, setTotalprice]=useState(0);
