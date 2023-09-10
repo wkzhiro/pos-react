@@ -1,0 +1,16 @@
+.viewport {
+    position: relative; /* 子要素を相対位置に配置するために必要 */
+    width: 100%; /* 必要に応じて幅を調整 */
+    height: 100%; /* 必要に応じて高さを調整 */
+}
+
+.interactive {
+    width: 100%;
+}
+
+.drawingBuffer {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+}

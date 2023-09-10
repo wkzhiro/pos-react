@@ -1,4 +1,5 @@
-import React, {useEffect} from "react";
+import React, {createContext, useContext,useEffect} from "react";
+import Reader from './component//Scanner/Reader';
 import { ChakraProvider } from "@chakra-ui/react";
 import {
   Editable,
@@ -12,17 +13,15 @@ import { Box } from '@chakra-ui/react'
 import { useState } from "react";
 import axios from "axios";
 
+export const Scancontext = createContext();
+
 const App = () => {  
   const url = "https://webapp-class-4-1.azurewebsites.net/";
   const [buyproducts, setProducts] = useState([]);
   const [product, setProduct] = useState({productcode:"",NAME:"", PRICE: ""});
-  // const [totalprice, setTotalprice]=useState(0);
   const [cart, setCart]=useState(["",""]);
-  //const productObj = { productcode:"1",name:"おーいお茶", price: 150};
-  // const productObj2 = { productcode:"2",name:"綾鷹", price: 160};
-  // const [product2, setProduct2] = useState(productObj2);
-
-  let [code, setCode] = useState(0);
+  
+  const [code, setCode] = useState(null);
 
   const ClickGet = async() =>{
     try {
@@ -107,19 +106,30 @@ const App = () => {
 
   };
 
+  console.log("code",code)
 
-  
 
   return (
     <>
       <ChakraProvider>
         <VStack p={10} spacing='4'>
-            <Editable w = "250px" borderWidth="1px" borderRadius='lg' defaultValue='コードを入力してください'>
+        <Scancontext.Provider value={[code, setCode]}>
+            <Reader />
+            <Editable w = "250px" borderWidth="1px" borderRadius='lg' value = {code || "コードを入力またはカメラで読込"} >
             <EditablePreview />
-            <EditableInput type="text" id = "code" placeholder ="コードを入力してください"  onChange={(e) => {
-            setCode(e.target.value)
-          }}/>
+            <EditableInput
+              type="text"
+              id = "code"  
+              onChange={(e) => {
+                const newValue = e.target.value;
+                if (newValue !== code) {
+                  // 新しい値が現在の値と異なる場合のみ更新する
+                  setCode(newValue);
+                }
+              }}
+          />
           </Editable>
+        </Scancontext.Provider>
         {/* <div className="codeinput">
           <input type="text" id = "code" placeholder ="コードを入力してください"  onChange={(e) => {
             setCode(e.target.value)
