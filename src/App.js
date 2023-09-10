@@ -1,4 +1,4 @@
-import React, {createContext, useContext,useEffect} from "react";
+import React, {createContext, useEffect} from "react";
 import Reader from './component//Scanner/Reader';
 import { ChakraProvider } from "@chakra-ui/react";
 import {

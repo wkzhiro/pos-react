@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from "react";
-import { Scancontext } from "../../App";
-import config from "./config.json";
 import Quagga from "quagga";
 import "./styles.css"; // 新しいCSSファイルをインポート
 
 const Scanner = props => {
     const { onDetected } = props;
-    const [code, ] = useContext(Scancontext);
 
     useEffect(() => {
     Quagga.init({
