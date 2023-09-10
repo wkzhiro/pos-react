@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import Quagga from "quagga";
 import "./styles.css"; // 新しいCSSファイルをインポート
 
@@ -78,16 +78,16 @@ const Scanner = props => {
         }
     });
 
-    let scanSucceeded = false;
+    Quagga.onDetected(detected);
+    }, []);
 
-    Quagga.onDetected(data => {
+    let scanSucceeded = false;
+    const detected = result => {
         if (!scanSucceeded) {
             scanSucceeded = true;
-            onDetected(data.codeResult.code); // ここで一度だけコールバックを呼び出す
-        }
-        });
-
-    }, []);
+        onDetected(result.codeResult.code);
+    };
+    };
 
     return (
         <div id="interactive" className="viewport">
