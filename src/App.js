@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useCallback } from "react";
+import React, {createContext, useEffect} from "react";
 import Reader from './component//Scanner/Reader';
 import { ChakraProvider } from "@chakra-ui/react";
 import {
@@ -36,7 +36,7 @@ const App = () => {
   const [newcount, setNewcount] = useState("")
   const [code, setCode] = useState(null);
 
-  const ClickGet = useCallback(async(code) =>{
+  const ClickGet = async(code) =>{
     try {
       const response = await axios.get(url + "search_product/" + code);
       // console.log("response",response.data)
@@ -67,7 +67,7 @@ const App = () => {
     } catch (error) {
       console.error("Error submitting data:", error);
     };
-    }, [url, productslist]);
+  };
 
 
   const clickAdd = (product) =>{
@@ -176,10 +176,12 @@ const App = () => {
   );
 
   useEffect(() => {
-    if (code !== null) {
-      ClickGet(code);
+    if(code!==null){
+      ClickGet(code)
     };
-  }, [code, ClickGet]);
+    // eslint-disable-next-line
+    },[code]
+    );
 
   // grouped_ProductsをProductモデルに合わせて変換する関数
   function convertToProductModel(productData) {
@@ -190,7 +192,7 @@ const App = () => {
     PRICE: productData.PRICE,
     COUNT: productData.COUNT
   };
-  }
+}
 
   const clickBuy = async() =>{
     
