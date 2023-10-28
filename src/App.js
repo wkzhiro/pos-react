@@ -29,7 +29,7 @@ const App = () => {
   // const url = " http://127.0.0.1:8000/";
 
   const [productslist, setProducts] = useState([]);
-  const [groupedProducts, setGroupedProducts] = useState([])
+  // const [groupedProducts, setGroupedProducts] = useState([])
   const [product, setProduct] = useState({PRD_CODE:"",NAME:"", PRICE: "", PRNAME:"",DISCOUNT:0});
   const [totalprice, setTotalprice]=useState()
   const [selectedRow, setSelectedRow] = useState(0);
@@ -86,7 +86,7 @@ const App = () => {
     
   const countChange = (count, index)=>{
 
-    console.log("count",index, "product", productslist [index])
+    // console.log("count",index, "product", productslist [index])
     // const updateedlist = [...productslist];
     // for (let i = 0; i < count-1; i++) {
     //   updateedlist.push({
@@ -230,7 +230,7 @@ const App = () => {
   const sendMessage = async(userid) =>{
     const text = "test"
     try{
-      const response = await axios.post(url + "promotion/" + userid, text);
+      axios.post(url + "promotion/" + userid, text);
     } catch (error) {
       console.error("Error submitting data:", error);
     };
