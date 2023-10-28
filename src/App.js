@@ -218,7 +218,7 @@ const App = () => {
       setProducts([])
       setProduct("")
       setProduct("")
-      setGroupedProducts([])
+      // setGroupedProducts([])
 
     } catch (error) {
       console.error("Error submitting data:", error);
