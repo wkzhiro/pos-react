@@ -25,7 +25,7 @@ import "./App.css"
 export const Scancontext = createContext();
 
 const App = () => {  
-  const url = "https://webapp-class-4-1.azurewebsites.net/";
+  const url = "https://webapp-class1to4-4-con.azurewebsites.net/";
   // const url = " http://127.0.0.1:8000/";
 
   const [productslist, setProducts] = useState([]);
