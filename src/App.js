@@ -26,7 +26,7 @@ export const Scancontext = createContext();
 
 const App = () => {  
   const url = "https://webapp-class1to4-4-con.azurewebsites.net/";
-  // const url = " http://127.0.0.1:8000/";
+  // const url = "http://127.0.0.1:8000/";
 
   const [productslist, setProducts] = useState([]);
   // const [groupedProducts, setGroupedProducts] = useState([])
@@ -204,6 +204,7 @@ const App = () => {
       MEM_ID: 2,
       EMP_CODE : 12,
       STORE_CODE : 30,
+      POINT_CARD : "P111222",
       POS_ID : 90,
       BUYPRODUCTS: convertedProducts
     }
@@ -228,10 +229,10 @@ const App = () => {
 
   };
 
-  const sendMessage = async(userid) =>{
-    const text = "test"
+  const sendMessage = async(userid,image_url) =>{
+    const data = { image_url: "https://i.imgur.com/7PeNPFY.jpg"}
     try{
-      axios.post(url + "promotion/" + userid, text);
+      axios.post(url + "promotion/" + userid, data);
     } catch (error) {
       console.error("Error submitting data:", error);
     };
@@ -356,7 +357,7 @@ const App = () => {
           </CardFooter>
         </Card>
         <Button colorScheme='blue' onClick={clickBuy}>購入する</Button>
-        <Button colorScheme='blue' onClick={() => sendMessage("U32a6630aaeb4fa84c9c7fb34c23a59e7")}>テキスト送信</Button>
+        <Button colorScheme='blue' onClick={() => sendMessage("U32a6630aaeb4fa84c9c7fb34c23a59e7")}>クーポン送信</Button>
         </VStack>
       </ChakraProvider>
     </>
