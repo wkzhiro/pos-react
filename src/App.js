@@ -232,9 +232,9 @@ const App = () => {
     });
 
     setProducts(updatedProductslist)
-    // eslint-disable-next-line
     console.log(updatedProductslist)
-    },[coupons,product]
+    // eslint-disable-next-line
+  },[coupons,product]
 
     );
 
@@ -285,14 +285,14 @@ const App = () => {
 
   };
 
-  const sendMessage = async(userid,image_url) =>{
-    const data = { image_url: "https://i.imgur.com/7PeNPFY.jpg"}
-    try{
-      axios.post(url + "promotion/" + userid, data);
-    } catch (error) {
-      console.error("Error submitting data:", error);
-    };
-  }
+  // const sendMessage = async(userid,image_url) =>{
+  //   const data = { image_url: "https://i.imgur.com/7PeNPFY.jpg"}
+  //   try{
+  //     axios.post(url + "promotion/" + userid, data);
+  //   } catch (error) {
+  //     console.error("Error submitting data:", error);
+  //   };
+  // }
 
   return (
     <>
