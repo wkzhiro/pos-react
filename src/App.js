@@ -25,12 +25,13 @@ import "./App.css"
 export const Scancontext = createContext();
 
 const App = () => {  
-  const url = "https://webapp-class1to4-4-con.azurewebsites.net/";
-  // const url = "http://127.0.0.1:8000/";
+  // const url = "https://webapp-class1to4-4-con.azurewebsites.net/";
+  const url = "http://127.0.0.1:8000/";
 
   const [productslist, setProducts] = useState([]);
   // const [groupedProducts, setGroupedProducts] = useState([])
   const [product, setProduct] = useState({PRD_CODE:"",NAME:"", PRICE: "", PRNAME:"",DISCOUNT:0});
+  const [coupons, setCoupons] = useState([])
   const [totalprice, setTotalprice]=useState()
   const [selectedRow, setSelectedRow] = useState(0);
   const [newcount, setNewcount] = useState("")
@@ -38,31 +39,53 @@ const App = () => {
 
   const ClickGet = async(code) =>{
     try {
-      const response = await axios.get(url + "search_product/" + code);
-      // console.log("response",response.data)
+          // コードの長さに基づいて異なるURLを設定
+        // コードの長さに基づいて異なるURLを設定
+        let endpoint = "";
+        let type ="";
+        if (code.length === 6) {
+          endpoint = url + "search_product/" + code;
+          type ="product"
+        } else if (code.length === 11) {
+          endpoint = url + "search_promotion/" + code;
+          type ="promotion"
+        } else {
+          throw new Error("コードは6桁または11桁である必要があります。");
+        }
 
-      if(response.data === "null" ){
-        setProduct({id : "null",NAME:"商品がマスタ未登録です", PRICE:""})
-      }else{
-        setProduct(response.data)
-        const product = response.data
-        const count = product.COUNT
-        const price = product.PRICE
-        const discount = product.DISCOUNT
 
-        const totalPrice = price * count;
-        const totalDiscount = discount * count;
-        const finalPrice = (price - discount) * count;
+        const response = await axios.get(endpoint);
+        const root = type
+        // console.log("response",response.data)
 
-        const updatedProduct = {
-          ...product,  // 既存のプロパティを維持
-          TOTALPRICE: totalPrice,  // 合計価格をセット
-          TOTALDISCOUNT: totalDiscount,  // 合計割引をセット
-          FINALPRICE: finalPrice  // 最終価格をセット
+        if(response.data === "null" ){
+          alert("コードが登録されていません")
+          setProduct({id : "null",NAME:"商品がマスタ未登録です", PRICE:""})
+        }else if(root === "product"){
+          setProduct(response.data)
+          const product = response.data
+          const count = product.COUNT
+          const price = product.PRICE
+          const discount = product.DISCOUNT
+
+          const totalPrice = price * count;
+          const totalDiscount = discount * count;
+          const finalPrice = (price - discount) * count;
+
+          const updatedProduct = {
+            ...product,  // 既存のプロパティを維持
+            TOTALPRICE: totalPrice,  // 合計価格をセット
+            TOTALDISCOUNT: totalDiscount,  // 合計割引をセット
+            FINALPRICE: finalPrice  // 最終価格をセット
+          };
+          clickAdd(updatedProduct)
+          setSelectedRow(productslist.length)
+        }else{
+          const updatedCoupons = [...coupons]
+          updatedCoupons.push(response.data)
+          setCoupons(updatedCoupons);
+          console.log(productslist, updatedCoupons)
         };
-        clickAdd(updatedProduct)
-        setSelectedRow(productslist.length)
-      };
 
     } catch (error) {
       console.error("Error submitting data:", error);
@@ -183,6 +206,39 @@ const App = () => {
     },[code]
     );
 
+  useEffect(() => {
+    // まず、PRD_IDをキーとしてクーポンのディスカウントをマッピングするオブジェクトを作成します。
+    const couponData  = coupons.reduce((acc, coupon) => {
+      acc[coupon.PRD_ID] = { PRNAME: coupon.PRNAME, DISCOUNT: coupon.DISCOUNT };; // クーポンのPRD_IDに対応するdiscountを保存します。
+      return acc;
+    }, {});
+
+    // 次に、productslistをマッピングして、各プロダクトのPRD_IDに対応するクーポンのdiscountがあれば設定します。
+    const updatedProductslist = productslist.map(product => {
+      // productのPRD_IDに一致するクーポンデータがあるか確認します。
+      const coupon = couponData[product.PRD_ID];
+      if (coupon) {
+        // クーポンデータがある場合、それを使って新しい商品オブジェクトを作成します。
+        return {
+          ...product,
+          PRNAME: coupon.PRNAME,   // クーポン名を適用
+          DISCOUNT: coupon.DISCOUNT, // 割引額を適用
+          TOTALDISCOUNT: coupon.DISCOUNT * product.COUNT,
+          FINALPRICE: (product.PRICE - coupon.DISCOUNT) * product.COUNT
+        };
+      }
+      // クーポンがない場合は、商品をそのまま返します。
+      return product;
+    });
+
+    setProducts(updatedProductslist)
+    // eslint-disable-next-line
+    console.log(updatedProductslist)
+    },[coupons,product]
+
+    );
+
+
   // grouped_ProductsをProductモデルに合わせて変換する関数
   function convertToProductModel(productData) {
   return {
@@ -204,7 +260,7 @@ const App = () => {
       MEM_ID: 2,
       EMP_CODE : 12,
       STORE_CODE : 30,
-      POINT_CARD : "P111222",
+      POINT_CARD : "P234567",
       POS_ID : 90,
       BUYPRODUCTS: convertedProducts
     }
@@ -269,7 +325,7 @@ const App = () => {
             </CardHeader>
 
             <CardBody>
-              <Stack spacing='4'>
+              <Stack spacing='4' key="product_data">
                 <Text>商品名：{product["NAME"]}</Text>
                 <HStack>
                   <Text>価格：{product["PRICE"]}{product["PRICE"] === "" ? "" : "円 × "}</Text>
@@ -315,7 +371,7 @@ const App = () => {
             const isTotalDiscountPositive = product.TOTALDISCOUNT > 0;
             
             return (
-              <Stack>
+              <Stack key={product.ID}>
                 <HStack mb="1" style={{ fontWeight: selectedRow === index ? 'bold' : 'normal' }}>
                   <Text fontSize="sm">{product.NAME} </Text>
                   <Text fontSize="sm"> {product.PRICE}円</Text>
@@ -357,7 +413,7 @@ const App = () => {
           </CardFooter>
         </Card>
         <Button colorScheme='blue' onClick={clickBuy}>購入する</Button>
-        <Button colorScheme='blue' onClick={() => sendMessage("U32a6630aaeb4fa84c9c7fb34c23a59e7")}>クーポン送信</Button>
+        {/* <Button colorScheme='blue' onClick={() => sendMessage("U32a6630aaeb4fa84c9c7fb34c23a59e7")}>クーポン送信</Button> */}
         </VStack>
       </ChakraProvider>
     </>
