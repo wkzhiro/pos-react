@@ -46,11 +46,11 @@ const App = () => {
         if (code.length === 6) {
           endpoint = url + "search_product/" + code;
           type ="product"
-        } else if (code.length === 11) {
+        } else if (code.length === 13) {
           endpoint = url + "search_promotion/" + code;
           type ="promotion"
         } else {
-          throw new Error("コードは6桁または11桁である必要があります。");
+          throw new Error("コードは6桁または13桁である必要があります。");
         }
 
 
