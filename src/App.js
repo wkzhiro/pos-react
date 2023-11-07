@@ -25,8 +25,8 @@ import "./App.css"
 export const Scancontext = createContext();
 
 const App = () => {  
-  const url = "https://webapp-class1to4-4-con.azurewebsites.net/";
-  // const url = "http://127.0.0.1:8000/";
+  // const url = "https://webapp-class1to4-4-con.azurewebsites.net/";
+  const url = "http://127.0.0.1:8000/";
 
   const [productslist, setProducts] = useState([]);
   // const [groupedProducts, setGroupedProducts] = useState([])
@@ -209,7 +209,7 @@ const App = () => {
   useEffect(() => {
     // まず、PRD_IDをキーとしてクーポンのディスカウントをマッピングするオブジェクトを作成します。
     const couponData  = coupons.reduce((acc, coupon) => {
-      acc[coupon.PRD_ID] = { PRNAME: coupon.PRNAME, DISCOUNT: coupon.DISCOUNT };; // クーポンのPRD_IDに対応するdiscountを保存します。
+      acc[coupon.PRD_ID] = { PRNAME: coupon.PRNAME, DISCOUNT: coupon.DISCOUNT, PRM_ID: coupon.PRM_ID };; // クーポンのPRD_IDに対応するdiscountを保存します。
       return acc;
     }, {});
 
@@ -224,7 +224,8 @@ const App = () => {
           PRNAME: coupon.PRNAME,   // クーポン名を適用
           DISCOUNT: coupon.DISCOUNT, // 割引額を適用
           TOTALDISCOUNT: coupon.DISCOUNT * product.COUNT,
-          FINALPRICE: (product.PRICE - coupon.DISCOUNT) * product.COUNT
+          FINALPRICE: (product.PRICE - coupon.DISCOUNT) * product.COUNT,
+          PRM_ID : coupon.PRM_ID
         };
       }
       // クーポンがない場合は、商品をそのまま返します。
@@ -246,7 +247,9 @@ const App = () => {
     PRD_CODE: productData.PRD_CODE, // CODEは指定なしの場合はnull
     NAME: productData.NAME,
     PRICE: productData.PRICE,
-    COUNT: productData.COUNT
+    COUNT: productData.COUNT,
+    DISCOUNT: productData.DISCOUNT,
+    PRM_ID : productData.PRM_ID
   };
 }
 
