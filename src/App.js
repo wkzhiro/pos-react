@@ -278,7 +278,7 @@ const App = () => {
       alert(`合計金額は${response.data[1]}円(税抜)、${response.data[2]}円（税込）です。`)
       setProducts([])
       setProduct("")
-      setProduct("")
+      setCoupons("")
       // setGroupedProducts([])
 
     } catch (error) {
